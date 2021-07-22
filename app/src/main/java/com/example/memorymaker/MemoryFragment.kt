@@ -1,26 +1,24 @@
 package com.example.memorymaker
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.*
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.Observer
 import java.io.File
-import java.net.URI
 import java.util.*
 
 private val DIALOG_DATE = "DialogDate"
@@ -41,6 +39,7 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var reportButton: Button
     private lateinit var photoButton: ImageButton
     private lateinit var photoView: ImageView
+    private lateinit var detailField: EditText
 
     private val memoryDetailViewModel: MemoryDetailViewModel by lazy {
         ViewModelProviders.of(this).get(MemoryDetailViewModel::class.java)
@@ -67,6 +66,7 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
 //        reportButton = view.findViewById(R.id.memory_report) as Button
         photoButton = view.findViewById(R.id.memory_camera) as ImageButton
         photoView = view.findViewById(R.id.memory_photo) as ImageView
+        detailField = view.findViewById(R.id.memory_detail) as EditText
 
         return view
 
@@ -86,6 +86,7 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
                         photoFile
                     )
                     updateUI()
+                    updatePhotoView()
                 }
             }
         )
@@ -122,56 +123,81 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
 
         titleField.addTextChangedListener(titleWatcher)
 
+
+
         favoriteCheckBox.apply {
             setOnCheckedChangeListener { _, isChecked ->
                 memory.isFavorite = isChecked
             }
 
-            dateButton.setOnClickListener {
-                DatePickerFragment.newInstance(memory.date).apply {
-                    show(this@MemoryFragment.requireFragmentManager(), DIALOG_DATE)
+        }
+
+        dateButton.setOnClickListener {
+            val fragment = DatePickerFragment.newInstance(memory.date)
+            fragment.setTargetFragment(this@MemoryFragment, 1)
+            fragment.apply {
+                show(this@MemoryFragment.requireFragmentManager(), DIALOG_DATE)
+            }
+        }
+
+
+        photoButton.apply {
+            val packageManager: PackageManager = requireActivity().packageManager
+
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? = packageManager.resolveActivity(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
+            if (resolvedActivity == null){
+                isEnabled = false
+            }
+            setOnClickListener{
+                val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
+                for (cameraActivity in cameraActivities){
+                    requireActivity().grantUriPermission(
+                        cameraActivity.activityInfo.packageName,
+                        photoUri,
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                    )
                 }
+
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                startActivityForResult(captureImage, REQUEST_PHOTO)
+            }
+        }
+
+        val detailWatcher = object : TextWatcher {
+
+            override fun beforeTextChanged(
+                sequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
+                // left blank on purpose
             }
 
-//            reportButton.setOnClickListener {
-//                Intent(Intent.ACTION_SEND).apply {
-//                    type = "text/plain"
-//                    putExtra(Intent.EXTRA_TEXT, getCrimeReport())
-//                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject))
-//                }.also { intent ->
-//                    val chooserIntent =
-//                        Intent.createChooser(intent, getString(R.string.send_memory))
-//                    startActivity(chooserIntent)
-//                }
-//            }
-
-
-
-            photoButton.apply {
-                val packageManager: PackageManager = requireActivity().packageManager
-
-                val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                val resolvedActivity: ResolveInfo? = packageManager.resolveActivity(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
-                if (resolvedActivity == null){
-                    isEnabled = false
-                }
-                setOnClickListener{
-                    val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
-                    for (cameraActivity in cameraActivities){
-                        requireActivity().grantUriPermission(
-                            cameraActivity.activityInfo.packageName,
-                            photoUri,
-                            Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                        )
-                    }
-
-                    captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                    startActivityForResult(captureImage, REQUEST_PHOTO)
-                }
+            override fun onTextChanged(
+                sequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                memory.pet = sequence.toString()
             }
 
+            override fun afterTextChanged(sequence: Editable?) {
+                // left blank on purpose
+            }
 
         }
+
+        detailField.addTextChangedListener(detailWatcher)
+    }
+
+    private var callbacks: Callbacks? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
     }
 
 
@@ -195,6 +221,8 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
             isChecked = memory.isFavorite
             jumpDrawablesToCurrentState()
         }
+
+        detailField.setText(memory.pet)
 
     }
 
@@ -276,6 +304,7 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
         }
         return true
     }
+
 
 
 }

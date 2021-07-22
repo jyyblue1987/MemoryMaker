@@ -5,6 +5,7 @@ import android.os.Bundle
 import java.util.*
 
 class MainActivity : AppCompatActivity(), Callbacks {
+    var fragmentNum : Int = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -17,6 +18,7 @@ class MainActivity : AppCompatActivity(), Callbacks {
     }
 
     fun showMemoryListFramgment() {
+        fragmentNum = 1
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, MemoryListFragment.newInstance())
             .commitAllowingStateLoss()
@@ -24,8 +26,14 @@ class MainActivity : AppCompatActivity(), Callbacks {
     }
 
     override fun onMemorySelected(Memory: UUID) {
+        fragmentNum = 2
+
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, MemoryFragment.newInstance(Memory))
             .commit()
+    }
+
+    override fun onBackPressed() {
+        showMemoryListFramgment()
     }
 }

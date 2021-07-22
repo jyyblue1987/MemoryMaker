@@ -3,6 +3,7 @@ package com.example.memorymaker
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.widget.CheckBox
 import android.widget.DatePicker
 import androidx.fragment.app.DialogFragment
 import java.util.*
