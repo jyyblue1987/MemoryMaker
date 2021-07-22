@@ -34,6 +34,11 @@ class MainActivity : AppCompatActivity(), Callbacks {
     }
 
     override fun onBackPressed() {
-        showMemoryListFramgment()
+        if( fragmentNum == 2 ) {
+            showMemoryListFramgment()
+            return
+        }
+
+        super.onBackPressed()
     }
 }
