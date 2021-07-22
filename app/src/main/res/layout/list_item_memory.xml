@@ -5,6 +5,13 @@
     android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
 
     <TextView
         android:id="@+id/memory_title"
@@ -16,8 +23,8 @@
         android:text="Memory Title"
         android:textColor="@android:color/black"
         android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@id/thumbnail"
         app:layout_constraintEnd_toStartOf="@+id/memory_favorite"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -28,17 +35,18 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:text="Memory Date"
+        app:layout_constraintStart_toEndOf="@id/thumbnail"
         app:layout_constraintEnd_toStartOf="@+id/memory_favorite"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/memory_title" />
+        app:layout_constraintTop_toBottomOf="@+id/memory_title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
-    <ImageView
+    <ImageButton
         android:id="@+id/memory_favorite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_solved" />
+        app:layout_constraintBottom_toBottomOf="@id/memory_date"
+        android:background="@drawable/ic_baseline_star_black_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

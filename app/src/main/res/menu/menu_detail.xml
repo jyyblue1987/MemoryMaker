@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/remove_menu"
+        android:icon="@drawable/ic_baseline_remove_circle_outline_24"
+        app:showAsAction="always"
+        android:title=""/>
+
+    <item
+        android:id="@+id/send_menu"
+        android:icon="@drawable/ic_round_send_24"
+        app:showAsAction="always"
+        android:title=""/>
+
+
+</menu>

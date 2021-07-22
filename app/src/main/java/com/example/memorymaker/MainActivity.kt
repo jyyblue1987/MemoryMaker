@@ -18,12 +18,14 @@ class MainActivity : AppCompatActivity(), Callbacks {
 
     fun showMemoryListFramgment() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, MemoryListFragment())
+            .replace(R.id.fragment_container, MemoryListFragment.newInstance())
             .commitAllowingStateLoss()
 
     }
 
     override fun onMemorySelected(Memory: UUID) {
-        TODO("Not yet implemented")
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, MemoryFragment.newInstance(Memory))
+            .commit()
     }
 }

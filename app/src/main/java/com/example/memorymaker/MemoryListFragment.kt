@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import android.widget.ImageView
 import android.widget.TextView
@@ -67,19 +68,19 @@ class MemoryListFragment : Fragment()  {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-//        inflater.inflate(R.menu.fragment_memory_list, menu)
+        inflater.inflate(R.menu.menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return when(item.itemId){
-//            R.id.new_memory -> {
-//                val memory = Memory()
-//                memoryListViewModel.addMemory(memory)
-//                callbacks?.onMemorySelected(memory.id)
-//                true
-//            }
-//            else -> return super.onOptionsItemSelected(item)
-//        }
+        return when(item.itemId){
+            R.id.new_memory -> {
+                val memory = Memory()
+                memoryListViewModel.addMemory(memory)
+                callbacks?.onMemorySelected(memory.id)
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
         return true
     }
 
@@ -96,9 +97,11 @@ class MemoryListFragment : Fragment()  {
     private inner class MemoryHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
         private lateinit var memory: Memory
 
+        val thumbnail: ImageView = itemView.findViewById(R.id.thumbnail)
         val titleTextView: TextView = itemView.findViewById(R.id.memory_title)
         val dateTextView: TextView = itemView.findViewById(R.id.memory_date)
-        val favoriteImageView: ImageView = itemView.findViewById(R.id.memory_favorite)
+        val btnFavorite: ImageButton = itemView.findViewById(R.id.memory_favorite)
+        val favoriteImageView: ImageButton = itemView.findViewById(R.id.memory_favorite)
 
         init {
             itemView.setOnClickListener(this)

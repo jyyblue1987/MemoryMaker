@@ -11,9 +11,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.format.DateFormat
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.*
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -53,6 +51,7 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
         memory = Memory()
         val memoryId: UUID = arguments?.getSerializable(ARG_MEMORY_ID) as UUID
         memoryDetailViewModel.loadMemory(memoryId)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -133,17 +132,17 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
                 }
             }
 
-            reportButton.setOnClickListener {
-                Intent(Intent.ACTION_SEND).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, getCrimeReport())
-                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject))
-                }.also { intent ->
-                    val chooserIntent =
-                        Intent.createChooser(intent, getString(R.string.send_memory))
-                    startActivity(chooserIntent)
-                }
-            }
+//            reportButton.setOnClickListener {
+//                Intent(Intent.ACTION_SEND).apply {
+//                    type = "text/plain"
+//                    putExtra(Intent.EXTRA_TEXT, getCrimeReport())
+//                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject))
+//                }.also { intent ->
+//                    val chooserIntent =
+//                        Intent.createChooser(intent, getString(R.string.send_memory))
+//                    startActivity(chooserIntent)
+//                }
+//            }
 
 
 
@@ -268,6 +267,33 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
                 arguments = args
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.remove_menu -> {
+                true
+            }
+            R.id.send_menu -> {
+                Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, getCrimeReport())
+                    putExtra(Intent.EXTRA_SUBJECT, getString(R.string.crime_report_subject))
+                }.also { intent ->
+                    val chooserIntent =
+                        Intent.createChooser(intent, getString(R.string.send_memory))
+                    startActivity(chooserIntent)
+                }
+                true
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
 

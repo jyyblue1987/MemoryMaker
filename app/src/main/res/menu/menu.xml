@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/new_memory"
+        android:icon="@drawable/ic_baseline_add_to_photos_24"
+        app:showAsAction="always"
+        android:title=""/>
+
+    <item
+        android:id="@+id/favorite_list"
+        android:icon="@drawable/ic_baseline_star_24"
+        app:showAsAction="always"
+        android:title=""/>
+
+    <item
+        android:id="@+id/all_list"
+        android:icon="@drawable/ic_baseline_star_half_24"
+        app:showAsAction="always"
+        android:title=""/>
+
+</menu>
