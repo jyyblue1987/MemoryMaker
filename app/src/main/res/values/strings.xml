@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">PetHeart</string>
+    <string name="memory_title">additional memory</string>
+    <string name="memory_title_label">Title.</string>
+    <string name="memory_details_label">Details</string>
+    <string name="memory_favorite_label">Favorite</string>
+    <string name="new_memory">New Memory </string>
+    <string name="pet_text">Choose pet </string>
+    <string name="memory_send_text">Send Pet Memory </string>
+    <string name="memory_report">%1$s! the memory was found on %2$s, %3$s, %4$s </string>
+    <string name="crime_report_solved">The Crime Report is solved </string>
+    <string name="crime_report_subject">CriminalIntent Crime Report </string>
+    <string name="send_memory">Send memory via </string>
+
+
+
+
+</resources>
