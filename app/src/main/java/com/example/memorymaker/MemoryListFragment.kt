@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.io.File
 import java.util.*
 
 
@@ -29,6 +30,10 @@ class MemoryListFragment : Fragment()  {
 
     private val memoryListViewModel: MemoryListViewModel by lazy {
         ViewModelProviders.of(this).get(MemoryListViewModel::class.java)
+    }
+
+    private val memoryDetailViewModel: MemoryDetailViewModel by lazy {
+        ViewModelProviders.of(this).get(MemoryDetailViewModel::class.java)
     }
 
     override fun onAttach(context: Context) {
@@ -117,6 +122,10 @@ class MemoryListFragment : Fragment()  {
             }else{
                 View.GONE
             }
+            val photoFile = memoryDetailViewModel.getPhotoFile(memory)
+
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
+            thumbnail.setImageBitmap(bitmap)
         }
 
         override fun onClick(v: View?) {
