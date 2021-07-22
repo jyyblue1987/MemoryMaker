@@ -69,6 +69,8 @@ class MemoryListFragment : Fragment()  {
                 updateUI(memories)
             }
         )
+
+        memoryListViewModel.getAll()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -82,6 +84,14 @@ class MemoryListFragment : Fragment()  {
                 val memory = Memory()
                 memoryListViewModel.addMemory(memory)
                 callbacks?.onMemorySelected(memory.id)
+                true
+            }
+            R.id.favorite_list -> {
+                memoryListViewModel.getFavorites()
+                true
+            }
+            R.id.all_list -> {
+                memoryListViewModel.getAll()
                 true
             }
             else -> return super.onOptionsItemSelected(item)

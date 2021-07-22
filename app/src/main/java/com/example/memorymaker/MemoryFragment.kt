@@ -286,6 +286,8 @@ class MemoryFragment : Fragment(), DatePickerFragment.Callbacks {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
             R.id.remove_menu -> {
+                memoryDetailViewModel.deleteMemory(memory)
+                callbacks?.onBackPressed()
                 true
             }
             R.id.send_menu -> {

@@ -3,6 +3,7 @@ package com.example.memorymaker.database
 import android.content.Context
 import android.content.LocusId
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Room
 import com.example.memorymaker.Memory
 import java.io.File
@@ -25,12 +26,21 @@ class MemoryRepository private constructor(context: Context) {
     private val executor = Executors.newSingleThreadExecutor()
     private val filesDir = context.applicationContext.filesDir
 
-    fun getMemories(): LiveData<List<Memory>> = memoryDao.getMemories()
+    fun getMemories(): List<Memory> = memoryDao.getMemories()
+    fun getFavorites(): List<Memory> = memoryDao.getFavorites()
     fun getMemory(id: UUID): LiveData<Memory?> = memoryDao.getMemory(id)
+
 
     fun updateMemory(memory: Memory) {
         executor.execute {
             memoryDao.updateMemory(memory)
+        }
+    }
+
+
+    fun deleteMemory(memory: Memory) {
+        executor.execute {
+            memoryDao.deleteMemory(memory)
         }
     }
 
